@@ -1,0 +1,71 @@
+ <div class="row center">
+        <div class="col-12" id="p1">
+
+            <h1>Greetings</h1>
+           
+        </div>
+    </div>
+    <div class="row center">
+        <div class="col-12">
+            <h3 id="displayName" class="name" >{{greet.name}} </h3>
+        </div>
+
+    </div>
+
+    <form action="/greet" method="POST">
+    <div class="row center">
+        <div class="col-3"></div>
+        <div class="col-6 center">
+           
+                <input id="inputBox" class="input" name="nameInput" type="console.text" placeholder="Enter your name here"   class="nameInput" pattern="[a-zA-Z]*"  title="Please enter only letters A-Z/ a-z"  >  
+        </div>
+     
+    </div>
+        <br><br>
+         <div class="row center">
+        <div class=" col-12 radio-toolbar">
+            <input type="radio" name="radioLang" value="English" value="English" id="1" class="language">
+            <label for="1"> English</label>
+            <input type="radio" name="radioLang" value="Afrikaans" id="2" class="language ">
+            <label for="2">Afrikaans</label>
+            <input type="radio" name="radioLang" value="isiXhosa" id="3" class="language">
+            <label for="3">isiXhosa</label>
+        </div>    
+    </div>
+    
+    <div class="row center ">
+        <div class="col-6" id="counterAndResetBox">
+            <p class="">
+                <strong class="counter1">Counter : &nbsp;
+                    <span id="countNumber" class="counter">0</span>
+                </strong>
+            </div>
+    </div>
+                <div class="row center">
+                    <div class="col-6 center" id="greetBox">
+                        <button id="greetBtn" type="submit" value="Submit" class="button">
+                            <strong>Greet Me</strong>
+                        </button>
+                    </div>
+           
+        </div>
+
+        </form>
+        <div class="flex-container row " >
+            <div class="myList" >
+            {{message}} 
+            </div>
+           
+          </div>
+        
+        
+         {{!-- <div class="col-6 center">
+            <button type="submit" id="resetBtn"  class="resetBtn">Reset</button>
+            </div>
+        <div class="col-6" id="greetBox">
+
+        </div> --}}
+
+
+    
+  
