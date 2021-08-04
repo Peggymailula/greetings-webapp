@@ -24,8 +24,7 @@ app.use(bodyParser.json())
 app.get("/", function(req, res){
   res.render("index",
   {
-   greet: greetings.getName(),
-  message: greetings.getMessage()
+   greet: greetings.getName()
 });
 });
 
