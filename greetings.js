@@ -1,82 +1,89 @@
 module.exports=function greetings() {
 
-    var name;
+    // var names;
     var counter;
     var message;
     var lang;
+    var name;
+    var userName;
+    var namesList=[];
 
-    var local ={}
-var counter = 0
+    var errormsg="Please enter a valid name."
+   
+    
+var counter = 0;
 
-function setName(name){
-    local = name
+
+
+function getNames(){
+    return namesList;
 }
 
+function setName(enterYourName){
+    enterYourName = enterYourName.charAt(0).toUpperCase() + enterYourName.slice(1).toLowerCase();
+    name = enterYourName;
+}
 function getName(){
-    return local
+
+    if (name == '' || name==undefined){
+        return errormsg
+    }
+
+    else{
+        return name;
+    }
+   
 }
 
+    function greetNow(languageSet) {
 
+   
+        if(languageSet == "English"){
+         return "Hello, " + name  + '!';
+        
+            
+        }
+        if(languageSet == "Afrikaans"){
+           return "Groete, " + name + '!';
+          
+        }
+        if(languageSet == "isiXhosa"){
+           return "Molo, " + name  + '!';
+          
+            
+        }   
+    }
 
-    function greetNow(userName,languageSet) {
-
-    //Convert lowercase first letter to make sure names are all are in same format
-  //  userName= userName.substring(0, 1).toUpperCase()+ userName.substring(1).slice();
-    userName= userName.substring(0, 1).toUpperCase() + userName.substring(1).toLowerCase();
-        if(local[userName] === undefined){
-            local[userName] = 0;
+    //  function getMessage(){
+    //      return message;
+    //  }
+    function getCounter(){
+        if(namesList[name] === undefined && name!=='' ){
+            namesList[name] = 0;
             counter++;
             
            
         }
         else{
 
-            local[userName]++;
+            namesList[name]++;
            
             
         }
-        if(languageSet == "English"){
-            return "Hello, " + userName  + '!';
-            //total++;
+           
             
-            
-        }
-        if(languageSet == "Afrikaans"){
-            return "Groete, " + userName + '!';
-            //total++;
-            
-        }
-        if(languageSet == "isiXhosa"){
-            return "Molo, " + userName  + '!';
-            //total++;
-            
-        }   
-    }
-
-    function getCounter(){
+        
+        // counter= namesList.length;
         return  counter;
     }
 
-    /*
-    function getLanguage(){
-        
-        return messaging;
-    }
-    
-
-    function countNames() {
-        return namesList.length;
-       // return total;
-    }
-
-    */
 
     function clearNames(){
      local.clear();
     }
 
    var setLang = function (value) {
-    var lang = '';
+    
     if (value === 'English') {
         lang = 'English';
     }
@@ -95,9 +102,10 @@ function getName(){
     getCounter,
     greetNow,
     setLang,
-    clearNames
+    clearNames,
+    // getMessage
         //setName,
-        //getName,
+        getNames
        //setLanguage,
        //getLanguage,
         //countNames

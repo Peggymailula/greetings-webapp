@@ -5,19 +5,22 @@
            
         </div>
     </div>
+
+   
     <div class="row center">
         <div class="col-12">
-            <h3 id="displayName" class="name" >{{greet.name}} </h3>
+            
+
+            <h3 id="displayName" class="name"> {{message}}{{error}} </h3>
         </div>
 
     </div>
 
-    <form action="/greet" method="POST">
-    <div class="row center">
+     <form action="/greet" method="POST">
         <div class="col-3"></div>
         <div class="col-6 center">
            
-                <input id="inputBox" class="input" name="nameInput" type="console.text" placeholder="Enter your name here"   class="nameInput" pattern="[a-zA-Z]*"  title="Please enter only letters A-Z/ a-z"  >  
+                <input id="inputBox" class="input" name="nameInput" type="console.text" placeholder="Enter your name here"  class="nameInput" pattern="[a-zA-Z]*"  title="Please enter only letters A-Z/ a-z"  >  
         </div>
      
     </div>
@@ -37,7 +40,7 @@
         <div class="col-6" id="counterAndResetBox">
             <p class="">
                 <strong class="counter1">Counter : &nbsp;
-                    <span id="countNumber" class="counter">0</span>
+                    <span id="countNumber" class="counter">{{count}}</span>
                 </strong>
             </div>
     </div>
@@ -51,12 +54,6 @@
         </div>
 
         </form>
-        <div class="flex-container row " >
-            <div class="myList" >
-            {{message}} 
-            </div>
-           
-          </div>
         
         
          {{!-- <div class="col-6 center">

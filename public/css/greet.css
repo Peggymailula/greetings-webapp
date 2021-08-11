@@ -33,7 +33,10 @@ h1{
   line-height: 75px;
   font-size: 30px;
 }
-
+.error{
+  color:crimson;
+  text-align: center;
+}
 
 
   @media  (min-width: 800px) {
