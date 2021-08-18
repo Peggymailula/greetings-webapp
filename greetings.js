@@ -7,6 +7,8 @@ module.exports = function greetings() {
     var name;
     var userName;
     var namesList = {};
+    var count;
+    var greet;
 
     var langE = 'Please pick a language.'
 
@@ -48,16 +50,19 @@ module.exports = function greetings() {
 
         langs = languageSet;
         if (languageSet == "English") {
-            return "Hello, " + name + '!';
+           greet="Hello, " + name + '!';
+           return greet;
 
 
         }
         if (languageSet == "Afrikaans") {
-            return "Groete, " + name + '!';
+          greet= "Groete, " + name + '!';
+          return greet;
 
         }
         if (languageSet == "isiXhosa") {
-            return "Molo, " + name + '!';
+            greet= "Molo, " + name + '!';
+            return greet;
 
 
         }
@@ -70,7 +75,7 @@ module.exports = function greetings() {
         if (name !== '') {
             if (namesList[name] === undefined) {
                 namesList[name] = 0;
-                counter++
+                counter++;
             }
             else {
                 namesList[name]++;
@@ -100,12 +105,24 @@ module.exports = function greetings() {
       
     }
 
-    function clearNames() {
-        local.clear();
-        counter=0;
-        namesList=[];
-        message= 'Reset succesful!'
+function getNumber(){
+    count= namesList[name].length;
+}
 
+    function clearNames() {
+        message= 'Reset succesful!';
+      greet=''
+        return message;
+
+    }
+
+        function clearingButtonFactFunc() {
+        counter = 0;
+        namesList = {};
+        //theNameObj = [];
+       // theGreet = "";
+       // theWarn = "";
+       // cleared = "Greets have been cleared.";
     }
 
     var setLang = function (value) {
@@ -130,8 +147,10 @@ module.exports = function greetings() {
         setLang,
         clearNames,
         getError,
-        //setName,
-        getNames
+        getNumber,
+        getNames,
+        clearingButtonFactFunc
+        
        
     }
 }

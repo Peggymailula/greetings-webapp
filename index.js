@@ -15,6 +15,7 @@ const greetings = Greetings();
 let message = '';
 let count = 0;
 let list = [];
+var success;
 
 
 
@@ -46,13 +47,15 @@ app.get("/", function (req, res) {
 
 
   req.flash('error', greetings.getError());
-  req.flash('success', 'Reset succesful!')
+ // req.flash('success', success)
 
   res.render("index",
     {
       message,
       count,
-      list
+      list,
+      success
+      
     });
 
 
@@ -98,6 +101,15 @@ app.post("/", function (req, res) {
 
   res.redirect("/");
 });
+
+app.post("/reset", function (req, res) {
+  success= greetings.clearNames();
+  count=0;
+  message='';
+
+  res.redirect("/");
+});
+
 
 let PORT = process.env.PORT || 3012;
 

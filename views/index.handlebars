@@ -1,4 +1,4 @@
- <div class="row center">
+<div class="row center">
         <div class="col-12" id="p1">
 
             <h1>Greetings</h1>
@@ -9,7 +9,7 @@
         <div class="col-12">
             
             <h3 id="displayName" class="error"> {{messages.error}} </h3>
-            <h3 id="displayName" class="green"> {{messages.success}} </h3>
+            <h3 id="displayName" class="green"> {{success}} </h3>
         </div>
 
     </div>
@@ -61,13 +61,13 @@
                     </div>
                      </form>
                      
-
+<form action="/reset" method="POST">
                      <div class="col-6 center">
             <button type="submit" id="resetBtn"  class="resetBtn">Reset</button>
                 
             </div>
 </div>
-           
+         </form>  
              <div id="greetBox" class='greetBoxes'>
            <button style="background-color: transparent; border:transparent;font-size:x-large" type="submit"><a href="/greeted"><strong><u>Greeted Names</u></strong></a></button>
            
@@ -77,11 +77,12 @@
            
            </div>
 </div>
-</form>
+
  
            
      
 
+     
        
    
         
