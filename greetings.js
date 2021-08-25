@@ -29,18 +29,20 @@ module.exports = function greetings() {
 
 
     function getError() {
+
+
+
         if (name === '' && name!==undefined) {
             return error;
         }
 
-        if (name !== ""  && langs !=='English') {
+        if (name !== undefined  && langs === null ) {
             return langE;
         }
 
-        if (name !== "" && name !== undefined && langs !== undefined) {
+         else  {
             return '';
         }
-
 
 
 

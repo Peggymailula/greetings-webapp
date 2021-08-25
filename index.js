@@ -18,6 +18,7 @@ let list = [];
 var success;
 var nameValue ='';
 var countValue= 0;
+var error='';
 
 
 
@@ -49,7 +50,7 @@ app.use(bodyParser.json())
 app.get("/", function (req, res) {
 
 
-  req.flash('error', greetings.getError());
+   req.flash('error', greetings.getError());
  // req.flash('success', success)
 
   res.render("index",
@@ -57,7 +58,8 @@ app.get("/", function (req, res) {
       message,
       count,
       list,
-      success
+      success,
+   
       
     });
 
@@ -101,11 +103,16 @@ app.get("/greeted", function (req, res) {
 
 
 app.post("/", function (req, res) {
+
+  
+ error= greetings.getError();
   list = greetings.getNames();
+  error=greetings.getError();
   console.log(list);
 
   res.redirect("/");
 });
+
 
 app.post("/reset", function (req, res) {
   success= greetings.clearNames();
