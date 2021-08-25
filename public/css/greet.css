@@ -46,8 +46,12 @@ h1{
   background-color: transparent;
   border: transparent;
 }
-.li{
+li{
   text-align: center;
+  list-style-type:none;
+  font-style:inherit;
+  font-size: x-large;
+  font-weight: bolder;
 }
 
 

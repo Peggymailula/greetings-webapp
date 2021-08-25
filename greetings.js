@@ -5,18 +5,14 @@ module.exports = function greetings() {
     var message;
     var langs;
     var name;
-    var userName;
-    var namesList = {};
-    var count;
+    var greet= "";
+    var namesList = [];
     var greet;
+   
 
-    var langE = 'Please pick a language.'
+    var langE = 'Please select a valid language.'
 
     var error = "Please enter a valid name."
-
-
-    var counter = 0;
-
 
 
 
@@ -33,85 +29,110 @@ module.exports = function greetings() {
 
 
     function getError() {
-        if (name === '') {
+        if (name === '' && name!==undefined) {
             return error;
         }
 
-        if (name !== "" && name !== undefined && langs === undefined) {
+        if (name !== ""  && langs !=='English') {
             return langE;
         }
 
+        if (name !== "" && name !== undefined && langs !== undefined) {
+            return '';
+        }
+
 
 
 
     }
 
-    function greetNow(languageSet) {
+    function greetNow(languageSet, setName) {
+       setName =   setName.charAt(0).toUpperCase() +   setName.slice(1).toLowerCase();
 
-        langs = languageSet;
-        if (languageSet == "English") {
-           greet="Hello, " + name + '!';
-           return greet;
+        if (setName != "" ) {
 
+            if (languageSet == "English" || languageSet == "Afrikaans" || languageSet == "isiXhosa") {
+                if (languageSet == "English") {
+                    greet="Hello, " + setName + '!';
+    
+                }
+                else if (languageSet == "Afrikaans") {
+                    greet= "Groete, " + setName + '!';
+    
+                }
+                else if (languageSet == "isiXhosa") {
+                    greet= "Molo, " + setName + '!';
+    
+                }
+    
+                if (namesList.length == 0){
+                    namesList.push({
+                        name: setName,
+                        count: 1
+                    });
+        
+                } else {
+                    if (!namesList.some(namesList =>  namesList.name === setName)) {
+                        namesList.push({
+                            name: setName,
+                            count: 1
+                        });
+    
+                    } else {
+                        
+
+                        namesList.forEach(element => {
+                            if (element.name === setName) {
+                                element.count++;
+        
+                            }
+                            
+                        });
+    
+                    }
+                    
+                }
+
+            }
 
         }
-        if (languageSet == "Afrikaans") {
-          greet= "Groete, " + name + '!';
-          return greet;
 
-        }
-        if (languageSet == "isiXhosa") {
-            greet= "Molo, " + name + '!';
-            return greet;
-
-
-        }
+        
     }
 
-    //  function getMessage(){
-    //      return message;
-    //  }
-    function getCounter() {
-        if (name !== '') {
-            if (namesList[name] === undefined) {
-                namesList[name] = 0;
-                counter++;
-            }
-            else {
-                namesList[name]++;
-            }
-        }
+    function getList(){
+        return namesList;
+    }
 
+    function getGreet() {
+        return greet
+    }
 
+ 
 
-
-        // counter= namesList.length;
-        return counter;
+    function getCounter(name) {
+   
+        return namesList.length;
     }
 
 
     function getNames() {
 
+
         if(namesList !=={}){
             
-            return Object.keys(namesList);
+            return namesList;
            
         }
-        else{
-           
-            return 'No names greeted yet.'
-
-        }
+      
       
     }
 
-function getNumber(){
-    count= namesList[name].length;
-}
 
     function clearNames() {
         message= 'Reset succesful!';
-      greet=''
+      greet='';
+      namesList = {};
         return message;
 
     }
@@ -119,10 +140,7 @@ function getNumber(){
         function clearingButtonFactFunc() {
         counter = 0;
         namesList = {};
-        //theNameObj = [];
-       // theGreet = "";
-       // theWarn = "";
-       // cleared = "Greets have been cleared.";
+       
     }
 
     var setLang = function (value) {
@@ -138,6 +156,20 @@ function getNumber(){
         }
         return lang
     }
+
+    function usernameFor(user) {
+        let userInfo;
+        namesList.forEach(element => {
+            if(element.name === user){
+                userInfo = {
+                    name: element.name,
+                    count: element.count
+                };
+            }
+        });
+        return userInfo;
+    }
+
     return {
 
         setName,
@@ -147,9 +179,12 @@ function getNumber(){
         setLang,
         clearNames,
         getError,
-        getNumber,
         getNames,
-        clearingButtonFactFunc
+        clearingButtonFactFunc,
+        usernameFor,
+        getList,
+        getGreet
+        
         
        
     }

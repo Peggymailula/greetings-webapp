@@ -1,13 +1,18 @@
+
 <div class="row">
 
     <h1>Greeted Names</h1>
 
     <div class="center">
-    <ul>
-        <li style="list-style-type: none;font-size:larger"> 
-            {{list}}</li>
-    </ul>
-    </div>
+   
+           <ul>
+{{#each list}}
+    <li><a href ="/count/{{name}}">{{name}}</a></li>
+{{/each}}
+</ul>
+
+{{!-- <a id="nGreeted" href="/counter/{{this.nameGreeted}}"><h2>{{this.nameGreeted}}</h2></a> --}}
+        
 
 <div class="center">
     

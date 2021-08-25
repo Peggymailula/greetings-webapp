@@ -16,6 +16,9 @@ let message = '';
 let count = 0;
 let list = [];
 var success;
+var nameValue ='';
+var countValue= 0;
+
 
 
 
@@ -64,19 +67,23 @@ app.get("/", function (req, res) {
 app.post("/greet", function (req, res) {
 
   greetings.greetNow(
-    req.body.radioLang
+    req.body.radioLang,
+    req.body.nameInput
   );
 
   greetings.setName(req.body.nameInput);
-  greetings.getName();
+  console.log(greetings.getName());
 
-  message = greetings.greetNow(req.body.radioLang);
+  message = greetings.getGreet();
   count = greetings.getCounter();
   res.redirect("/");
 });
 
 app.get("/greeted", function (req, res) {
 
+  console.log(greetings.getList());
+  
+
   res.render('greeted', {
    list : greetings.getNames()
 })
@@ -85,15 +92,13 @@ app.get("/greeted", function (req, res) {
   //res.redirect("/");
 });
 
-app.get("/counter/", function (req, res) {
+// app.get("/count/", function (req, res) {
+//   const userSelected = req.params.username;
+//   res.render('count', {
+//       userGreeted: greetings.usernameFor(userSelected)
+//   });
+// });
 
-  res.render('greeted', {
-   list : greetings.getNames()
-})
-  
-
-  //res.redirect("/");
-});
 
 app.post("/", function (req, res) {
   list = greetings.getNames();
@@ -104,11 +109,26 @@ app.post("/", function (req, res) {
 
 app.post("/reset", function (req, res) {
   success= greetings.clearNames();
+ 
   count=0;
   message='';
 
   res.redirect("/");
 });
+
+app.get('/count/:names', function(req, res) {
+  const userSelected = req.params.names;
+  console.log(req.params.names)
+
+  nameValue=greetings.usernameFor(userSelected).name;
+  countValue=greetings.usernameFor(userSelected).count
+  console.log(nameValue);
+  res.render('count', {
+     nameValue,
+     countValue
+  });
+});
+
 
 
 let PORT = process.env.PORT || 3012;
