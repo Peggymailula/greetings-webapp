@@ -118,7 +118,7 @@ module.exports = function greetings(pool) {
             }
 
         } catch (err) {
-            console.log(name)
+           
             console.error('Error has occured!', err);
             throw err;
         }

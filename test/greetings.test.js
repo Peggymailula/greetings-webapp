@@ -19,10 +19,7 @@ beforeEach(async function(){
 
 describe('Greet exercise:Language setting' , function(){
     it('should select the English language and the English value be used' , function(){
-        beforeEach(async function(){
-    console.log("*****");
-    await pool.query("delete from users;");
-});
+
 
         let greet1 =greetings();
        
