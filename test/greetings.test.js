@@ -10,13 +10,15 @@ const pool = new Pool({
     connectionString
 });
 
+
 beforeEach(async function(){
     console.log("*****");
     await pool.query("delete from users;");
 });
 
-
 describe('Greet exercise:Name setting' , function(){
+
+    
     it('should take set and return  Peggy\'s name from the input box' , function(){
         let greet1 = greetings();
         greet1.setName('Peggy');
@@ -41,6 +43,11 @@ it('should take set and return  Amanda\'s name from the input box' , function(){
 })
 describe('Greet exercise:Language setting' , function(){
     it('should select the English language and the English value be used' , function(){
+        beforeEach(async function(){
+    console.log("*****");
+    await pool.query("delete from users;");
+});
+
         let greet1 =greetings();
        
          assert.equal("English",greet1.setLang('English'));
@@ -63,6 +70,12 @@ it('should select the isiXhosa language and the isiXhosa value be used' , functi
 
 describe('Greet exercise:Message setting' ,async function(){
     it('should take in the name Amy and use the English language to greet her' , async function(){
+
+        beforeEach(async function(){
+            console.log("*****");
+            await pool.query("delete from users;");
+        });
+        
         let greet1 = greetings(pool);
         
         await greet1.greetNow('English','Amy');
@@ -92,6 +105,12 @@ it('should take in the name Penny and use isiXhosa language to greet her' ,async
 
 describe('Greet exercise:Counter setting' ,async function(){
     it('should take in one name and return counter as one' , async function(){
+
+        beforeEach(async function(){
+            console.log("*****");
+            await pool.query("delete from users;");
+        });
+        
         var greet2 = greetings(pool);
       
         await greet2.greetNow('English','Amy');
@@ -133,10 +152,17 @@ it('should take in five  names with two duplicates and return counter as 3' , as
 });
 
 
+
 })
 
 describe('Greet exercise:List of greeted names' ,async function(){
     it('should take in one name and return that name in list' , async function(){
+
+        beforeEach(async function(){
+            console.log("*****");
+            await pool.query("delete from users;");
+        });
+        
         var greet2 = greetings(pool);
       
         await greet2.greetNow('English','Amy');
@@ -178,9 +204,6 @@ it('should take in five  names with two duplicates and return list' , async func
 
 
 
-
 })
 
-after(function(){
-    pool.end();
-})
+ 
