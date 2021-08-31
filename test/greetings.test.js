@@ -10,21 +10,59 @@ const pool = new Pool({
     connectionString
 });
 
-describe('The basic database web app', function(){
+beforeEach(async function(){
+    console.log("*****");
+    await pool.query("delete from users;");
+});
 
-    beforeEach(async function(){
-        console.log("*****");
-        await pool.query("delete from users;");
+
+describe('Greet exercise:Name setting' , function(){
+    it('should take set and return  Peggy\'s name from the input box' , function(){
+        let greet1 = greetings();
+        greet1.setName('Peggy');
         
+         assert.equal('Peggy',greet1.getName());
+
+});
+it('should take set and return  Annie\'s name from the input box' , function(){
+    let greet1 = greetings()
+    greet1.setName('Annie');
+    
+     assert.equal('Annie',greet1.getName());
+
+});
+it('should take set and return  Amanda\'s name from the input box' , function(){
+    let greet1 = greetings();
+    greet1.setName('Amanda');
+    
+     assert.equal('Amanda',greet1.getName());
+
+});
+})
+describe('Greet exercise:Language setting' , function(){
+    it('should select the English language and the English value be used' , function(){
+        let greet1 =greetings();
+       
+         assert.equal("English",greet1.setLang('English'));
+
+});
+it('should select the Afrikaans language and the Afrikaans value be used' , function(){
+    let greet1 = greetings();
    
+     assert.equal("Afrikaans",greet1.setLang('Afrikaans'));
+
+});
+it('should select the isiXhosa language and the isiXhosa value be used' , function(){
+    let greet1 = greetings();
    
+     assert.equal("isiXhosa",greet1.setLang('isiXhosa'));
+
+});
+})
+
+
+describe('Greet exercise:Message setting' ,async function(){
     it('should take in the name Amy and use the English language to greet her' , async function(){
-
-        beforeEach(async function(){
-            console.log("*****");
-            await pool.query("delete from users;");
-        });
-        
         let greet1 = greetings(pool);
         
         await greet1.greetNow('English','Amy');
@@ -34,7 +72,6 @@ describe('The basic database web app', function(){
          assert.equal("Hello, Amy!",greet1.getGreet());
 
 });
-
 it('should take in the name Enhle and use the Afrikaans language to greet her' ,async function(){
     let greet1 = greetings(pool);
     await greet1.greetNow('Afrikaans','Amanda')
@@ -50,16 +87,11 @@ it('should take in the name Penny and use isiXhosa language to greet her' ,async
      assert.equal("Molo, Penny!",greet1.getGreet());
 
 });
+})
 
 
-
+describe('Greet exercise:Counter setting' ,async function(){
     it('should take in one name and return counter as one' , async function(){
-
-        beforeEach(async function(){
-            console.log("*****");
-            await pool.query("delete from users;");
-        });
-        
         var greet2 = greetings(pool);
       
         await greet2.greetNow('English','Amy');
@@ -101,23 +133,44 @@ it('should take in five  names with two duplicates and return counter as 3' , as
 });
 
 
-
 })
 
+describe('Greet exercise:List of greeted names' ,async function(){
+    it('should take in one name and return that name in list' , async function(){
+        var greet2 = greetings(pool);
+      
+        await greet2.greetNow('English','Amy');
+      
+        
+        
+         assert.deepEqual([ {count: 1,name:'Amy'}] ,await greet2.getList());
 
+});
 
- it('should take in five different names and return object list with all of them' , async function(){
+ it('should take in three different names and return object list with all of them' , async function(){
     var greet2 = greetings(pool);
   
     await greet2.greetNow('English','Amy');
     await greet2.greetNow('English','Peggy');
     await greet2.greetNow('Afrikaans','Penny');
-    await greet2.greetNow('isiXhosa','Enhle');
-    await greet2.greetNow('isiXhosa','Mbali');
-  
+
     
     
-    assert.deepEqual([ {count: 1,name:'Amy'}, {count: 1,name:'Peggy'}, {count: 1,name:'Penny'}, {count: 1,name:'Enhle'},{count: 1,name:'Mbali'}] ,await greet2.getList());
+    assert.deepEqual([
+        {
+          count: 1,
+          name: 'Amy'
+        },
+        {
+          count: 1,
+          name: 'Peggy'
+        },
+        {
+          count: 1,
+          name: 'Penny'
+        }
+      ]
+         ,await greet2.getList());
 
  });
 
@@ -135,10 +188,7 @@ it('should take in five  names with two duplicates and return list' , async func
     assert.deepEqual([ {count: 2,name:'Amy'},{count: 2,name:'Penny'},{count: 1,name:'Mbali'}] ,await greet2.getList());
 });
 
-after(function(){
-    pool.end();
-});
+
+
 
 })
-
- 
