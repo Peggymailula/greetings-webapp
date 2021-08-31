@@ -1,18 +1,21 @@
-module.exports = function greetings() {
+module.exports = function greetings(pool) {
 
     // var names;
     var counter;
     var message;
     var langs;
     var name;
-    var greet= "";
+    var greet = "";
     var namesList = [];
     var greet;
-   
+    var greeted=[];
+
+
 
     var langE = 'Please select a valid language.'
 
     var error = "Please enter a valid name."
+
 
 
 
@@ -23,24 +26,22 @@ module.exports = function greetings() {
     function getName() {
 
 
-
         return name;
     }
-
 
     function getError() {
 
 
 
-        if (name === '' && name!==undefined) {
+        if (name === '' && name !== undefined) {
             return error;
         }
 
-        if (name !== undefined  && langs === null ) {
+        if (name !== undefined && langs === null) {
             return langE;
         }
 
-         else  {
+        else {
             return '';
         }
 
@@ -48,61 +49,84 @@ module.exports = function greetings() {
 
     }
 
-    function greetNow(languageSet, setName) {
-       setName =   setName.charAt(0).toUpperCase() +   setName.slice(1).toLowerCase();
+    async function greetNow(languageSet, setName) {
+        setName = setName.charAt(0).toUpperCase() + setName.slice(1).toLowerCase();
 
-        if (setName != "" ) {
+        try {
 
-            if (languageSet == "English" || languageSet == "Afrikaans" || languageSet == "isiXhosa") {
-                if (languageSet == "English") {
-                    greet="Hello, " + setName + '!';
-    
-                }
-                else if (languageSet == "Afrikaans") {
-                    greet= "Groete, " + setName + '!';
-    
-                }
-                else if (languageSet == "isiXhosa") {
-                    greet= "Molo, " + setName + '!';
-    
-                }
-    
-                if (namesList.length == 0){
-                    namesList.push({
-                        name: setName,
-                        count: 1
-                    });
-        
-                } else {
-                    if (!namesList.some(namesList =>  namesList.name === setName)) {
+            setName = setName.charAt(0).toUpperCase() + setName.slice(1).toLowerCase();
+            setName = setName;
+
+
+            var noDuplicate = await pool.query(`SELECT name from users WHERE name = $1`, [setName]);
+
+            if (noDuplicate.rowCount === 0) {
+
+                await pool.query(`INSERT INTO users (name,counter) VALUES ($1,$2)`, [setName, 1])
+            }
+
+            else {
+                await pool.query(`UPDATE users SET  counter= counter + 1 WHERE name = $1`, [setName])
+            }
+
+            if (setName != "") {
+
+                if (languageSet == "English" || languageSet == "Afrikaans" || languageSet == "isiXhosa") {
+                    if (languageSet == "English") {
+                        greet = "Hello, " + setName + '!';
+
+                    }
+                    else if (languageSet == "Afrikaans") {
+                        greet = "Groete, " + setName + '!';
+
+                    }
+                    else if (languageSet == "isiXhosa") {
+                        greet = "Molo, " + setName + '!';
+
+                    }
+
+                    if (namesList.length == 0) {
                         namesList.push({
                             name: setName,
                             count: 1
                         });
-    
-                    } else {
-                        
 
-                        namesList.forEach(element => {
-                            if (element.name === setName) {
-                                element.count++;
-        
-                            }
-                            
-                        });
-    
+                    } else {
+                        if (!namesList.some(namesList => namesList.name === setName)) {
+                            namesList.push({
+                                name: setName,
+                                count: 1
+                            });
+
+                        } else {
+
+
+                            namesList.forEach(element => {
+                                if (element.name === setName) {
+                                    element.count++;
+
+                                }
+
+                            });
+
+                        }
+
                     }
-                    
+
                 }
 
             }
 
+        } catch (err) {
+            console.log(name)
+            console.error('Error has occured!', err);
+            throw err;
         }
 
-        
+
     }
 
-    function getList(){
+    function getList() {
         return namesList;
     }
 
@@ -110,39 +134,56 @@ module.exports = function greetings() {
         return greet
     }
 
- 
 
-    function getCounter(name) {
-   
+
+    async function getCounter() {
+        namesList= await pool.query(`SELECT * from users`)
+        namesList = namesList.rows;
         return namesList.length;
     }
 
 
-    function getNames() {
+  async function getNames() {
+      var naming = await pool.query(`SELECT name FROM users`)
+      greeted= naming.rows;
+
+      return greeted;
+       
 
 
-        if(namesList !=={}){
-            
-            return namesList;
+    
+    }
+
+    async function countNames(countedName){
+
+    var counting= await pool.query(`SELECT counter FROM users WHERE name = $1`,[countedName])
+    counting = counting.rows;
+
+    return counting[0].counter;
+
+    }
+
+
+    async function clearNames() {
+
+        try{
+            await pool.query(`DELETE FROM users`)
+           
            
         }
+        catch(err){
+            console.error('Error detected on reset', err);
+            throw err;
+        }
       
-      
-    }
-
-
-    function clearNames() {
-        message= 'Reset succesful!';
-      greet='';
-      namesList = {};
-        return message;
+        
 
     }
 
-        function clearingButtonFactFunc() {
+    function clearingButtonFactFunc() {
         counter = 0;
         namesList = {};
-       
+
     }
 
     var setLang = function (value) {
@@ -162,7 +203,7 @@ module.exports = function greetings() {
     function usernameFor(user) {
         let userInfo;
         namesList.forEach(element => {
-            if(element.name === user){
+            if (element.name === user) {
                 userInfo = {
                     name: element.name,
                     count: element.count
@@ -185,9 +226,10 @@ module.exports = function greetings() {
         clearingButtonFactFunc,
         usernameFor,
         getList,
-        getGreet
-        
-        
-       
+        getGreet,
+        countNames
+
+
+
     }
 }

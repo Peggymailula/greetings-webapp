@@ -3,14 +3,29 @@ const session = require('express-session');
 const express = require('express');
 const exphbs = require('express-handlebars');
 const bodyParser = require('body-parser');
+const pg = require("pg");
+const Pool = pg.Pool;
+
+// should we use a SSL connection
+let useSSL = false;
+let local = process.env.LOCAL || false;
+if (process.env.DATABASE_URL && !local){
+    useSSL = true;
+}
 
 
 const Greetings = require('./greetings');
 
+const connectionString = process.env.DATABASE_URL ||'postgresql://codex:pg123@localhost:5432/greeting';
 
+
+const pool = new Pool({
+ connectionString,
+  ssl: useSSL
+});
 
 const app = express();
-const greetings = Greetings();
+
 
 let message = '';
 let count = 0;
@@ -18,7 +33,7 @@ let list = [];
 var success;
 var nameValue ='';
 var countValue= 0;
-var error='';
+
 
 
 
@@ -44,13 +59,19 @@ app.use(flash());
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }))
 // parse application/json
-app.use(bodyParser.json())
+app.use(bodyParser.json());
 
 
-app.get("/", function (req, res) {
 
 
-   req.flash('error', greetings.getError());
+const greetings = Greetings(pool);
+
+console.log(pool);
+
+app.get("/", async function  (req, res) {
+
+  count = await greetings.getCounter();
+   req.flash('error', await greetings.getError());
  // req.flash('success', success)
 
   res.render("index",
@@ -58,7 +79,7 @@ app.get("/", function (req, res) {
       message,
       count,
       list,
-      success,
+    
    
       
     });
@@ -66,28 +87,31 @@ app.get("/", function (req, res) {
 
 });
 
-app.post("/greet", function (req, res) {
+app.post("/greet", async function(req, res) {
 
-  greetings.greetNow(
+  await greetings.greetNow(
     req.body.radioLang,
     req.body.nameInput
   );
 
-  greetings.setName(req.body.nameInput);
-  console.log(greetings.getName());
+  // await greetings.setName({
+  //   name: req.body.nameInput
+  // });
+  // console.log(greetings.getName());
 
-  message = greetings.getGreet();
-  count = greetings.getCounter();
+  message = await greetings.getGreet();
+
   res.redirect("/");
 });
 
-app.get("/greeted", function (req, res) {
+app.get("/greeted", async function(req, res) {
 
-  console.log(greetings.getList());
-  
+  // console.log(greetings.getList());
+  list=await greetings.getNames();
+  // console.log(list);
 
   res.render('greeted', {
-   list : greetings.getNames()
+   list 
 })
   
 
@@ -102,34 +126,34 @@ app.get("/greeted", function (req, res) {
 // });
 
 
-app.post("/", function (req, res) {
+app.post("/",async function (req, res) {
 
   
- error= greetings.getError();
-  list = greetings.getNames();
-  error=greetings.getError();
+ error= await greetings.getError();
+  list = await greetings.getNames();
+  error= await greetings.getError();
   console.log(list);
 
   res.redirect("/");
 });
 
 
-app.post("/reset", function (req, res) {
-  success= greetings.clearNames();
+app.post("/reset", async function (req, res) {
  
-  count=0;
-  message='';
+await greetings.clearNames();
+ 
 
   res.redirect("/");
 });
 
-app.get('/count/:names', function(req, res) {
+app.get('/count/:names',async function(req, res) {
   const userSelected = req.params.names;
   console.log(req.params.names)
 
-  nameValue=greetings.usernameFor(userSelected).name;
-  countValue=greetings.usernameFor(userSelected).count
+  nameValue=  userSelected;
+  countValue=await greetings.countNames(userSelected);
   console.log(nameValue);
+  
   res.render('count', {
      nameValue,
      countValue
