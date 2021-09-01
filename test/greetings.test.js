@@ -10,17 +10,18 @@ const pool = new Pool({
     connectionString
 });
 
-beforeEach(async function(){
-    console.log("*****");
-    await pool.query("delete from users;");
-});
 
+describe('The basic database web app', function(){
 
+    beforeEach(async function(){
+        // clean the tables before each test run
+        await pool.query("delete from users;");
+      
+    });
 
-
-
-describe('Greet exercise:Message setting' ,async function(){
-    it('should take in the name Amy and use the English language to greet her' , async function(){
+    it('Greet exercise:Message setting', async function(){
+        
+        // the Factory Function is called CategoryService
         let greet1 = greetings(pool);
         
         await greet1.greetNow('English','Amy');
@@ -29,128 +30,9 @@ describe('Greet exercise:Message setting' ,async function(){
         
          assert.equal("Hello, Amy!",greet1.getGreet());
 
+    });
+
+    after(function(){
+        pool.end();
+    })
 });
-it('should take in the name Enhle and use the Afrikaans language to greet her' ,async function(){
-    let greet1 = greetings(pool);
-    await greet1.greetNow('Afrikaans','Amanda')
-    
-     assert.equal("Groete, Amanda!",greet1.getGreet());
-
-});
-it('should take in the name Penny and use isiXhosa language to greet her' ,async function(){
-    let greet1 =greetings(pool);
-    await greet1.greetNow('isiXhosa','Penny')
-  
-    
-     assert.equal("Molo, Penny!",greet1.getGreet());
-
-});
-})
-
-
-describe('Greet exercise:Counter setting' ,async function(){
-    it('should take in one name and return counter as one' , async function(){
-        var greet2 = greetings(pool);
-      
-        await greet2.greetNow('English','Amy');
-      
-        
-        
-         assert.equal(1,await greet2.getCounter());
-
-});
-
-it('should take in five different names and return counter as 5' , async function(){
-    var greet2 = greetings(pool);
-  
-    await greet2.greetNow('English','Amy');
-    await greet2.greetNow('English','Peggy');
-    await greet2.greetNow('Afrikaans','Penny');
-    await greet2.greetNow('isiXhosa','Enhle');
-    await greet2.greetNow('isiXhosa','Mbali');
-  
-    
-    
-     assert.equal(5,await greet2.getCounter());
-
-});
-
-it('should take in five  names with two duplicates and return counter as 3' , async function(){
-    var greet2 = greetings(pool);
-  
-    await greet2.greetNow('English','Amy');
-    await greet2.greetNow('English','Amy');
-    await greet2.greetNow('Afrikaans','Penny');
-    await greet2.greetNow('isiXhosa','Penny');
-    await greet2.greetNow('isiXhosa','Mbali');
-  
-    
-    
-     assert.equal(3,await greet2.getCounter());
-
-});
-
-
-})
-
-describe('Greet exercise:List of greeted names' ,async function(){
-    it('should take in one name and return that name in list' , async function(){
-        var greet2 = greetings(pool);
-      
-        await greet2.greetNow('English','Amy');
-      
-        
-        
-         assert.deepEqual([ {count: 1,name:'Amy'}] ,await greet2.getList());
-
-});
-
- it('should take in three different names and return object list with all of them' , async function(){
-    var greet2 = greetings(pool);
-  
-    await greet2.greetNow('English','Amy');
-    await greet2.greetNow('English','Peggy');
-    await greet2.greetNow('Afrikaans','Penny');
-
-    
-    
-    assert.deepEqual([
-        {
-          count: 1,
-          name: 'Amy'
-        },
-        {
-          count: 1,
-          name: 'Peggy'
-        },
-        {
-          count: 1,
-          name: 'Penny'
-        }
-      ]
-         ,await greet2.getList());
-
- });
-
-it('should take in five  names with two duplicates and return list' , async function(){
-    var greet2 = greetings(pool);
-  
-    await greet2.greetNow('English','Amy');
-    await greet2.greetNow('English','Amy');
-    await greet2.greetNow('Afrikaans','Penny');
-    await greet2.greetNow('isiXhosa','Penny');
-    await greet2.greetNow('isiXhosa','Mbali');
-  
-    
-    
-    assert.deepEqual([ {count: 2,name:'Amy'},{count: 2,name:'Penny'},{count: 1,name:'Mbali'}] ,await greet2.getList());
-});
-
-
-
-
-})
-
-// after(function(){
-//     pool.end();
-// });

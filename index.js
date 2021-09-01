@@ -75,7 +75,7 @@ app.get("/", async function  (req, res) {
   count = await greetings.getCounter();
 
  
- // req.flash('success', success)
+  
 
   res.render("index",
     {
@@ -106,7 +106,6 @@ app.post("/greet", async function(req, res) {
   
 
   message = await greetings.getGreet();
-
 
   }
   
@@ -143,6 +142,8 @@ app.post("/",async function (req, res) {
 
 
 app.post("/reset", async function (req, res) {
+
+  req.flash('success','Application has succesfully been reset!')
  
 await greetings.clearNames();
  
