@@ -172,7 +172,7 @@ module.exports = function greetings(pool) {
            
         }
         catch(err){
-            console.error('Error detected on reset', err);
+            console.error('Error detected on reset button', err);
             throw err;
         }
       
