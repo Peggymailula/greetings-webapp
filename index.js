@@ -73,7 +73,8 @@ console.log(pool);
 app.get("/", async function  (req, res) {
 
   count = await greetings.getCounter();
-   req.flash('error', await greetings.getError());
+
+ 
  // req.flash('success', success)
 
   res.render("index",
@@ -91,18 +92,24 @@ app.get("/", async function  (req, res) {
 
 app.post("/greet", async function(req, res) {
 
-  await greetings.greetNow(
-    req.body.radioLang,
-    req.body.nameInput
-  );
-
-  // await greetings.setName({
-  //   name: req.body.nameInput
-  // });
-  // console.log(greetings.getName());
+  if(!req.body.nameInput){
+    req.flash('error', 'Please enter a valid name');
+  }
+  else if(!req.body.radioLang){
+    req.flash('error','Please select a valid language');
+  }
+  else{
+    await greetings.greetNow(
+      req.body.radioLang,
+      req.body.nameInput
+    );
+  
 
   message = await greetings.getGreet();
 
+
+  }
+  
   res.redirect("/");
 });
 
@@ -117,23 +124,18 @@ app.get("/greeted", async function(req, res) {
 })
   
 
-  //res.redirect("/");
+
 });
 
-// app.get("/count/", function (req, res) {
-//   const userSelected = req.params.username;
-//   res.render('count', {
-//       userGreeted: greetings.usernameFor(userSelected)
-//   });
-// });
+
 
 
 app.post("/",async function (req, res) {
 
   
- error= await greetings.getError();
+
   list = await greetings.getNames();
-  error= await greetings.getError();
+
   console.log(list);
 
   res.redirect("/");
