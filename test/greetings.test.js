@@ -1,12 +1,12 @@
 const assert = require('assert');
 const greetings = require('../greetings');
+const greets = require('../routes/greeting-service');
 const pg = require("pg");
 const Pool = pg.Pool;
 
 
-const connectionString = process.env.DATABASE_URL || 'postgresql://localhost:5432/greeting';
-// const connectionString = process.env.DATABASE_URL || 'postgresql://codex:pg123@localhost:5432/greeting';
-;
+const connectionString = process.env.DATABASE_URL || 'postgresql://codex:pg123@localhost:5432/greeting';
+
 
 const pool = new Pool({
     connectionString
@@ -26,6 +26,7 @@ describe('Greet exercise:Message setting' ,async function(){
 
 it('should take in the name Amanda and use the Afrikaans language to greet her' ,async function(){
     let greet1 = greetings(pool);
+    
     await greet1.greetNow('Afrikaans','Amanda')
 
      assert.equal("Groete, Amanda!",greet1.getGreet());
@@ -47,9 +48,13 @@ it('should take in the name Penny and use isiXhosa language to greet her' ,async
 
 describe('Greet exercise:Counter setting' ,async function(){
     it('should take in one name and return counter as one' , async function(){
-        var greet2 = greetings(pool);
+        var greet1 = greetings(pool);
+        var greet2 = greets(pool);
 
-        await greet2.greetNow('English','Amy');
+        await greet2.show('Amy')
+
+        await greet1.greetNow('English','Amy');
+        
 
 
          assert.equal(1,await greet2.getCounter());
@@ -57,7 +62,15 @@ describe('Greet exercise:Counter setting' ,async function(){
 });
 
 it('should take in five different names and return counter as 5' , async function(){
+    var greet1 = greets(pool);
     var greet2 = greetings(pool);
+
+
+    await greet1.show('Amy');
+    await greet1.show('Peggy');
+    await greet1.show('Afrikaans','Penny');
+    await greet1.show('Enhle');
+    await greet1.show('Mbali');
 
     await greet2.greetNow('English','Amy');
     await greet2.greetNow('English','Peggy');
@@ -67,13 +80,21 @@ it('should take in five different names and return counter as 5' , async functio
 
 
 
-     assert.equal(5,await greet2.getCounter());
+     assert.equal(5,await greet1.getCounter());
 
 
 });
 
 it('should take in five  names with two duplicates and return counter as 3' , async function(){
+    var greet1 = greets(pool);
     var greet2 = greetings(pool);
+
+
+    await greet1.show('Amy');
+    await greet1.show('Amy');
+    await greet1.show('Penny');
+    await greet1.show('Penny');
+    await greet1.show('Mbali');
 
     await greet2.greetNow('English','Amy');
     await greet2.greetNow('English','Amy');
@@ -83,7 +104,7 @@ it('should take in five  names with two duplicates and return counter as 3' , as
 
 
 
-     assert.equal(3,await greet2.getCounter());
+     assert.equal(3,await greet1.getCounter());
 
 });
 

@@ -54,20 +54,6 @@ module.exports = function greetings(pool) {
 
         try {
 
-            setName = setName.charAt(0).toUpperCase() + setName.slice(1).toLowerCase();
-            setName = setName;
-
-
-            var noDuplicate = await pool.query(`SELECT name from users WHERE name = $1`, [setName]);
-
-            if (noDuplicate.rowCount === 0) {
-
-                await pool.query(`INSERT INTO users (name,counter) VALUES ($1,$2)`, [setName, 1])
-            }
-
-            else {
-                await pool.query(`UPDATE users SET  counter= counter + 1 WHERE name = $1`, [setName])
-            }
 
             if (setName != "") {
 
@@ -143,42 +129,10 @@ module.exports = function greetings(pool) {
     }
 
 
-  async function getNames() {
-      var naming = await pool.query(`SELECT name FROM users`)
-      greeted= naming.rows;
-
-      return greeted;
-       
 
 
-    
-    }
 
-    async function countNames(countedName){
-
-    var counting= await pool.query(`SELECT counter FROM users WHERE name = $1`,[countedName])
-    counting = counting.rows;
-
-    return counting[0].counter;
-
-    }
-
-
-    async function clearNames() {
-
-        try{
-            await pool.query(`DELETE FROM users`)
-           
-           
-        }
-        catch(err){
-            console.error('Error detected on reset button', err);
-            throw err;
-        }
-      
-        
-
-    }
+   
 
     function clearingButtonFactFunc() {
         counter = 0;
@@ -220,15 +174,13 @@ module.exports = function greetings(pool) {
         getCounter,
         greetNow,
         setLang,
-        clearNames,
+       
         getError,
-        getNames,
         clearingButtonFactFunc,
         usernameFor,
         getList,
         getGreet,
-        countNames
-
+       
 
 
     }

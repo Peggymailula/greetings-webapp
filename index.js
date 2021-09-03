@@ -15,6 +15,7 @@ if (process.env.DATABASE_URL && !local){
 
 
 const Greetings = require('./greetings');
+const Greet = require('./routes/greeting-service') 
 
 const connectionString = process.env.DATABASE_URL ||'postgresql://codex:pg123@localhost:5432/greeting';
 
@@ -67,6 +68,7 @@ app.use(bodyParser.json());
 
 
 const greetings = Greetings(pool);
+const greeter = Greet(pool);
 
 console.log(pool);
 
@@ -99,6 +101,7 @@ app.post("/greet", async function(req, res) {
     req.flash('error','Please select a valid language');
   }
   else{
+    await greeter.show(req.body.nameInput);
     await greetings.greetNow(
       req.body.radioLang,
       req.body.nameInput
@@ -115,7 +118,7 @@ app.post("/greet", async function(req, res) {
 app.get("/greeted", async function(req, res) {
 
   // console.log(greetings.getList());
-  list=await greetings.getNames();
+  list=await greeter.getNames();
   // console.log(list);
 
   res.render('greeted', {
@@ -133,7 +136,7 @@ app.post("/",async function (req, res) {
 
   
 
-  list = await greetings.getNames();
+  list = await greeter.getNames();
 
   console.log(list);
 
@@ -145,7 +148,7 @@ app.post("/reset", async function (req, res) {
 
   req.flash('success','Application has succesfully been reset!')
  
-await greetings.clearNames();
+await greeter.clearNames();
  
 
   res.redirect("/");
@@ -156,7 +159,7 @@ app.get('/count/:names',async function(req, res) {
   console.log(req.params.names)
 
   nameValue=  userSelected;
-  countValue=await greetings.countNames(userSelected);
+  countValue=await greeter.countNames(userSelected);
   console.log(nameValue);
   
   res.render('count', {
