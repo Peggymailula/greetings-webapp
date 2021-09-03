@@ -30,13 +30,6 @@ const pool = new Pool({
 const app = express();
 
 
-let message = '';
-let count = 0;
-let list = [];
-var success;
-var nameValue ='';
-var countValue= 0;
-
 
 
 
@@ -68,105 +61,22 @@ app.use(bodyParser.json());
 
 
 const greetings = Greetings(pool);
-const greeter = Greet(pool);
+const greeter = Greet(greetings);
 
 console.log(pool);
 
-app.get("/", async function  (req, res) {
+app.get("/", greeter.start);
 
-  count = await greetings.getCounter();
+app.post("/greet", greeter.greets);
 
- 
-  
+app.get("/greeted",greeter.greeted );
 
-  res.render("index",
-    {
-      message,
-      count,
-      list,
-    
-   
-      
-    });
+app.post("/",greeter.home);
 
 
-});
+app.post("/reset", greeter.reset);
 
-app.post("/greet", async function(req, res) {
-
-  if(!req.body.nameInput){
-    req.flash('error', 'Please enter a valid name');
-  }
-  else if(!req.body.radioLang){
-    req.flash('error','Please select a valid language');
-  }
-  else{
-    await greeter.show(req.body.nameInput);
-    await greetings.greetNow(
-      req.body.radioLang,
-      req.body.nameInput
-    );
-  
-
-  message = await greetings.getGreet();
-
-  }
-  
-  res.redirect("/");
-});
-
-app.get("/greeted", async function(req, res) {
-
-  // console.log(greetings.getList());
-  list=await greeter.getNames();
-  // console.log(list);
-
-  res.render('greeted', {
-   list 
-})
-  
-
-
-});
-
-
-
-
-app.post("/",async function (req, res) {
-
-  
-
-  list = await greeter.getNames();
-
-  console.log(list);
-
-  res.redirect("/");
-});
-
-
-app.post("/reset", async function (req, res) {
-
-  req.flash('success','Application has succesfully been reset!')
- 
-await greeter.clearNames();
- 
-
-  res.redirect("/");
-});
-
-app.get('/count/:names',async function(req, res) {
-  const userSelected = req.params.names;
-  console.log(req.params.names)
-
-  nameValue=  userSelected;
-  countValue=await greeter.countNames(userSelected);
-  console.log(nameValue);
-  
-  res.render('count', {
-     nameValue,
-     countValue
-  });
-});
+app.get('/count/:names',greeter.counting);
 
 
 
